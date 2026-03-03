@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>ElecPro GA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --accent:#f5a623;--accent-dim:rgba(245,166,35,.15);
+  --green:#22c55e;--red:#ef4444;
+  --r:12px;--safe:env(safe-area-inset-bottom,20px);
+  --fd:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+[data-theme="dark"]{
+  --bg:#09090e;--s1:#111117;--s2:#18181f;--s3:#22222c;
+  --bd:#2b2b3a;--tx:#ededf8;--mu:#7878a0;
+  --sh:rgba(0,0,0,.5);--ov:rgba(0,0,0,.78);
+}
+[data-theme="light"]{
+  --bg:#f0f0f7;--s1:#ffffff;--s2:#e8e8f2;--s3:#dcdcec;
+  --bd:#c8c8dc;--tx:#111117;--mu:#60607a;
+  --sh:rgba(0,0,0,.07);--ov:rgba(0,0,0,.42);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:var(--fd);min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
+#hdr{position:sticky;top:0;z-index:90;background:var(--bg);border-bottom:1px solid var(--bd);padding:14px 18px 11px;box-shadow:0 2px 14px var(--sh)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px}.logo em{color:var(--accent);font-style:normal}
+.hdr-btns{display:flex;gap:7px}
+.hbtn{background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:var(--fd);font-size:13px;font-weight:700;padding:6px 11px;border-radius:8px;cursor:pointer;transition:all .15s}
+.hbtn:active{transform:scale(.93)}
+.nav{display:flex;gap:4px;margin-top:11px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nbtn{flex-shrink:0;background:none;border:1px solid var(--bd);color:var(--mu);font-family:var(--fd);font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .2s}
+.nbtn.on{background:var(--accent);border-color:var(--accent);color:#09090e}
+#main{padding:18px;padding-bottom:calc(70px + var(--safe))}
+.pg{display:none}.pg.on{display:block;animation:fi .22s ease}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 2px 10px var(--sh)}
+.ctitle{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--mu);letter-spacing:.4px;margin-bottom:5px}
+input,select,textarea{width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:var(--fd);font-size:14px;padding:11px 14px;border-radius:8px;outline:none;-webkit-appearance:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--s1);color:var(--tx)}
+textarea{resize:none;height:68px}
+.btn{display:block;width:100%;background:var(--accent);color:#09090e;font-family:var(--fd);font-size:14px;font-weight:800;padding:14px;border:none;border-radius:10px;cursor:pointer;letter-spacing:.3px;transition:all .15s}
+.btn:active{transform:scale(.98);opacity:.85}
+.btn.sec{background:var(--s2);color:var(--tx);border:1px solid var(--bd);font-weight:600}
+.btn.red{background:var(--red);color:#fff}
+.btn.sm{padding:8px 14px;font-size:12px;width:auto;display:inline-block}
+.row2{display:flex;gap:10px;margin-top:10px}
+.row2 .btn{margin-top:0}
+.pcat{margin-bottom:18px}
+.pcat-hd{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.pcat-hd::after{content:'';flex:1;height:1px;background:var(--bd)}
+.prow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background .15s}
+.prow:active{background:var(--s2)}
+.pname{font-size:13px;font-weight:600;flex:1;padding-right:8px}
+.prange{font-family:var(--fm);font-size:12px;color:var(--accent)}
+.pavg{font-family:var(--fm);font-size:10px;color:var(--mu);margin-top:2px;text-align:right}
+.li{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;margin-bottom:6px}
+.li-info{flex:1}
+.li-name{font-size:13px;font-weight:600}
+.li-det{font-family:var(--fm);font-size:11px;color:var(--mu);margin-top:2px}
+.li-tot{font-family:var(--fm);font-size:13px;color:var(--green)}
+.xbtn{background:none;border:none;color:var(--mu);font-size:20px;cursor:pointer;padding:0 3px;line-height:1}
+.xbtn:active{color:var(--red)}
+.totbar{background:var(--s2);border:1px solid var(--accent);border-radius:var(--r);padding:15px;display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.tot-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu)}
+.tot-sub{font-family:var(--fm);font-size:10px;color:var(--mu);margin-top:3px}
+.tot-amt{font-family:var(--fm);font-size:26px;color:var(--accent)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.scard{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px;box-shadow:0 2px 8px var(--sh)}
+.sval{font-family:var(--fm);font-size:22px;color:var(--accent)}
+.slbl{font-size:11px;color:var(--mu);margin-top:3px}
+.ccard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;box-shadow:0 2px 8px var(--sh)}
+.ccard:active{border-color:var(--accent)}
+.cname{font-size:15px;font-weight:700}
+.cmeta{font-size:12px;color:var(--mu);margin-top:4px;font-family:var(--fm)}
+.camt{font-family:var(--fm);font-size:14px;color:var(--green);margin-top:6px}
+.cdate{font-size:11px;color:var(--mu);margin-top:3px}
+.empty{text-align:center;padding:48px 20px;color:var(--mu)}
+.empty-ico{font-size:48px;margin-bottom:12px}
+.empty-txt{font-size:14px;line-height:1.7}
+.cres{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-top:14px}
+.crow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.crow:last-child{border-bottom:none;font-weight:700;color:var(--accent)}
+.cval{font-family:var(--fm)}
+.lrow{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;margin-bottom:6px;font-size:13px}
+.chip{display:inline-flex;background:var(--accent-dim);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:600;margin:4px 4px 0 0}
+.swrap{position:relative;margin-bottom:14px}
+.swrap input{padding-left:36px}
+.sico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none}
+.div{height:1px;background:var(--bd);margin:14px 0}
+.ovl{display:none;position:fixed;inset:0;z-index:200;background:var(--ov);backdrop-filter:blur(4px);align-items:flex-end}
+.ovl.on{display:flex;animation:fi .2s ease}
+.mdl{width:100%;background:var(--s1);border-top:1px solid var(--bd);border-radius:20px 20px 0 0;padding:20px 20px calc(22px + var(--safe));animation:su .25s ease;max-height:88vh;overflow-y:auto}
+@keyframes su{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.mhandle{width:40px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 16px}
+.mtitle{font-size:17px;font-weight:800;margin-bottom:14px}
+.step{display:flex;align-items:center;gap:12px;margin:8px 0}
+.sbtn{width:36px;height:36px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-size:20px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sval2{font-family:var(--fm);font-size:18px;min-width:32px;text-align:center}
+#toast{position:fixed;bottom:calc(70px + var(--safe) + 10px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:10px 22px;border-radius:20px;z-index:300;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body data-theme="dark">
+<div id="hdr">
+  <div class="hdr-row">
+    <div class="logo">Elec<em>Pro</em> GA</div>
+    <div class="hdr-btns">
+      <button class="hbtn" id="lbtn" onclick="toggleLang()">🇧🇷 PT</button>
+      <button class="hbtn" id="tbtn" onclick="toggleTheme()">☀️</button>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn on" onclick="go('est',this)" id="n0"></button>
+    <button class="nbtn"    onclick="go('pri',this)" id="n1"></button>
+    <button class="nbtn"    onclick="go('cal',this)" id="n2"></button>
+    <button class="nbtn"    onclick="go('cli',this)" id="n3"></button>
+  </div>
+</div>
+<div id="main">
+  <div class="pg on" id="pg-est">
+    <div class="card">
+      <div class="ctitle" id="lbl-new-est"></div>
+      <div class="fld"><label id="lbl-cname"></label><input id="est-client" type="text"/></div>
+      <div class="fld"><label id="lbl-addr"></label><input id="est-addr" type="text"/></div>
+      <div class="fld"><label id="lbl-notes"></label><textarea id="est-notes"></textarea></div>
+      <button class="btn sec sm" onclick="openPicker()" id="lbl-add-item"></button>
+    </div>
+    <div id="lineitems"></div>
+    <div class="card">
+      <div class="ctitle" id="lbl-extras"></div>
+      <div class="fld"><label id="lbl-permit"></label><input id="inp-permit" type="number" value="150" min="0"/></div>
+      <div class="fld"><label id="lbl-markup"></label><input id="inp-markup" type="number" value="25" min="0"/></div>
+      <div class="fld"><label id="lbl-tax"></label><input id="inp-tax" type="number" value="0" min="0"/></div>
+    </div>
+    <div class="totbar" id="totbar" style="display:none">
+      <div>
+        <div class="tot-lbl" id="lbl-est-total"></div>
+        <div class="tot-sub" id="tot-sub"></div>
+      </div>
+      <div class="tot-amt" id="tot-amt">$0</div>
+    </div>
+    <div class="row2" style="margin-top:14px">
+      <button class="btn" onclick="saveEst()" id="lbl-save"></button>
+      <button class="btn sec" onclick="shareEst()" id="lbl-share"></button>
+    </div>
+    <button class="btn red" style="margin-top:10px" onclick="clearEst()" id="lbl-clear"></button>
+  </div>
+  <div class="pg" id="pg-pri">
+    <div class="swrap"><span class="sico">🔍</span><input id="psearch" type="text" oninput="filterP()"/></div>
+    <div id="pricelist"></div>
+    <div class="card" style="margin-top:16px">
+      <div class="ctitle" id="lbl-ga-title"></div>
+      <p style="font-size:13px;color:var(--mu);line-height:1.65" id="lbl-ga-text"></p>
+      <div style="margin-top:10px">
+        <span class="chip">📍 Fulton Co: $50–$200</span>
+        <span class="chip">📍 Gwinnett Co: $75–$250</span>
+        <span class="chip">📍 Cobb Co: $60–$220</span>
+        <span class="chip">📍 DeKalb Co: $50–$180</span>
+      </div>
+    </div>
+  </div>
+  <div class="pg" id="pg-cal">
+    <div class="card">
+      <div class="ctitle" id="lbl-calc-title"></div>
+      <div class="fld"><label id="lbl-sqft"></label><input id="c-sqft" type="number" placeholder="e.g. 1800" min="0"/></div>
+      <div class="fld"><label id="lbl-svctype"></label>
+        <select id="c-svc">
+          <option value="new" id="o-new"></option>
+          <option value="rewire" id="o-rew"></option>
+          <option value="part" id="o-par"></option>
+          <option value="upg" id="o-upg"></option>
+        </select>
+      </div>
+      <div class="fld"><label id="lbl-panel"></label>
+        <select id="c-pan"><option value="100">100A</option><option value="150">150A</option><option value="200" selected>200A</option><option value="400">400A</option></select>
+      </div>
+      <div class="fld"><label id="lbl-points"></label><input id="c-pts" type="number" placeholder="e.g. 30" min="0"/></div>
+      <div class="fld"><label id="lbl-circuits"></label><input id="c-cir" type="number" value="2" min="0"/></div>
+      <button class="btn" onclick="doCalc()" id="lbl-calc-run"></button>
+      <div class="cres" id="cres" style="display:none">
+        <div class="crow"><span id="lbl-cr-lab"></span><span class="cval" id="cr-lab"></span></div>
+        <div class="crow"><span id="lbl-cr-mat"></span><span class="cval" id="cr-mat"></span></div>
+        <div class="crow"><span id="lbl-cr-pan"></span><span class="cval" id="cr-pan"></span></div>
+        <div class="crow"><span id="lbl-cr-per"></span><span class="cval" id="cr-per"></span></div>
+        <div class="crow"><span id="lbl-cr-tot"></span><span class="cval" id="cr-tot"></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle" id="lbl-labor-ref"></div>
+      <div class="lrow"><span id="lbl-l1"></span><span class="prange">$75–$150/hr</span></div>
+      <div class="lrow"><span id="lbl-l2"></span><span class="prange">$40–$70/hr</span></div>
+      <div class="lrow"><span id="lbl-l3"></span><span class="prange">~$95–$130/hr</span></div>
+    </div>
+  </div>
+  <div class="pg" id="pg-cli">
+    <div class="stats">
+      <div class="scard"><div class="sval" id="s-cnt">0</div><div class="slbl" id="lbl-s-cli"></div></div>
+      <div class="scard"><div class="sval" id="s-rev">$0</div><div class="slbl" id="lbl-s-quot"></div></div>
+    </div>
+    <div id="clilist"></div>
+  </div>
+</div>
+<div class="ovl" id="m-pick">
+  <div class="mdl">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="m-pick-title"></div>
+    <div id="m-pick-body"></div>
+  </div>
+</div>
+<div class="ovl" id="m-form">
+  <div class="mdl">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="m-form-title"></div>
+    <div class="fld"><label id="lbl-mf-qty"></label>
+      <div class="step">
+        <button class="sbtn" onclick="adjQty(-1)">−</button>
+        <div class="sval2" id="mf-qty">1</div>
+        <button class="sbtn" onclick="adjQty(1)">＋</button>
+      </div>
+    </div>
+    <div class="fld"><label id="lbl-mf-price"></label><input id="mf-price" type="number" min="0"/></div>
+    <div class="row2">
+      <button class="btn" onclick="confirmAdd()" id="lbl-mf-add"></button>
+      <button class="btn sec" onclick="closeM('m-form')" id="lbl-mf-can"></button>
+    </div>
+  </div>
+</div>
+<div class="ovl" id="m-cli">
+  <div class="mdl">
+    <div class="mhandle"></div>
+    <div class="mtitle" id="mc-name"></div>
+    <div style="font-family:var(--fm);font-size:12px;color:var(--mu);margin-bottom:8px" id="mc-addr"></div>
+    <div class="div"></div>
+    <div id="mc-items"></div>
+    <div class="totbar" style="margin-top:12px">
+      <div class="tot-lbl" id="lbl-est-total2"></div>
+      <div class="tot-amt" id="mc-tot"></div>
+    </div>
+    <button class="btn sec" style="margin-top:12px" onclick="closeM('m-cli')" id="lbl-mc-close"></button>
+    <button class="btn red" style="margin-top:8px" id="mc-del"></button>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const T={en:{n0:'📋 Estimate',n1:'💰 Prices',n2:'🔧 Calculator',n3:'👷 Clients','lbl-new-est':'New Estimate','lbl-cname':'Client Name','est-client':'e.g. John Smith','lbl-addr':'Address','est-addr':'123 Main St, Atlanta GA','lbl-notes':'Notes','est-notes':'Service description...','lbl-add-item':'＋ Add Item from List','lbl-extras':'Extras & Adjustments','lbl-permit':'Permit Fee ($)','lbl-markup':'Material Markup (%)','lbl-tax':'Tax / Other ($)','lbl-est-total':'Estimate Total','lbl-est-total2':'Estimate Total','lbl-save':'💾 Save Estimate','lbl-share':'📤 Share','lbl-clear':'🗑 Clear','psearch':'Search services…','lbl-ga-title':'⚠️ Georgia Requirements','lbl-ga-text':'All electrical work in GA requires a licensed contractor. Permits required for most jobs.','lbl-calc-title':'Wire & Material Estimator','lbl-sqft':'Total Square Footage','lbl-svctype':'Service Type','o-new':'New Construction','o-rew':'Full Rewire','o-par':'Partial / Additions','o-upg':'Panel Upgrade Only','lbl-panel':'Panel Size (Amps)','lbl-points':'Outlets / Switches Count','lbl-circuits':'AC / Dedicated Circuits','lbl-calc-run':'⚡ Calculate Estimate','lbl-cr-lab':'Labor','lbl-cr-mat':'Materials','lbl-cr-pan':'Panel / Breakers','lbl-cr-per':'Permit (est.)','lbl-cr-tot':'TOTAL RANGE','lbl-labor-ref':'Labor Rate Reference','lbl-l1':'Licensed Electrician','lbl-l2':'Apprentice / Helper','lbl-l3':'IBEW Local 613 Journeyman','lbl-s-cli':'Total Clients','lbl-s-quot':'Total Quoted','lbl-mf-qty':'Quantity','lbl-mf-price':'Unit Price ($)','lbl-mf-add':'Add to Estimate','lbl-mf-can':'Cancel','lbl-mc-close':'Close','mc-del':'🗑 Delete Estimate','m-pick-title':'Select Service','bd-labor':'Labor/Services','bd-markup':'Markup','ts-added':'Added','ts-saved':'Estimate saved! ✓','ts-del':'Deleted!','ts-empty':'Add at least one item!','ts-copied':'Copied!','empty-cli':'No saved estimates yet.\nCreate one in the Estimate tab!','share-for':'Estimate for','share-tot':'ESTIMATE TOTAL','share-foot':'*Prices are estimates. Final cost may vary.*'},pt:{n0:'📋 Orçamento',n1:'💰 Preços',n2:'🔧 Calculadora',n3:'👷 Clientes','lbl-new-est':'Novo Orçamento','lbl-cname':'Nome do Cliente','est-client':'ex: João Silva','lbl-addr':'Endereço','est-addr':'123 Rua Principal, Atlanta GA','lbl-notes':'Observações','est-notes':'Descrição do serviço...','lbl-add-item':'＋ Adicionar Item da Lista','lbl-extras':'Extras e Ajustes','lbl-permit':'Taxa de Permissão ($)','lbl-markup':'Margem de Material (%)','lbl-tax':'Imposto / Outros ($)','lbl-est-total':'Total do Orçamento','lbl-est-total2':'Total do Orçamento','lbl-save':'💾 Salvar Orçamento','lbl-share':'📤 Compartilhar','lbl-clear':'🗑 Limpar','psearch':'Buscar serviços…','lbl-ga-title':'⚠️ Requisitos da Geórgia','lbl-ga-text':'Todo serviço elétrico na GA exige eletricista licenciado. Permissões obrigatórias na maioria dos trabalhos.','lbl-calc-title':'Estimador de Materiais','lbl-sqft':'Metragem Total (sq ft)','lbl-svctype':'Tipo de Serviço','o-new':'Construção Nova','o-rew':'Recabeamento Completo','o-par':'Parcial / Adições','o-upg':'Apenas Upgrade do Painel','lbl-panel':'Tamanho do Painel (Amps)','lbl-points':'Qtd. Tomadas / Interruptores','lbl-circuits':'Circuitos Dedicados (A/C etc.)','lbl-calc-run':'⚡ Calcular Estimativa','lbl-cr-lab':'Mão de Obra','lbl-cr-mat':'Materiais','lbl-cr-pan':'Painel / Disjuntores','lbl-cr-per':'Permissão (est.)','lbl-cr-tot':'FAIXA TOTAL','lbl-labor-ref':'Referência de Mão de Obra','lbl-l1':'Eletricista Licenciado','lbl-l2':'Aprendiz / Auxiliar','lbl-l3':'IBEW Local 613 Oficial','lbl-s-cli':'Total de Clientes','lbl-s-quot':'Total Orçado','lbl-mf-qty':'Quantidade','lbl-mf-price':'Preço Unitário ($)','lbl-mf-add':'Adicionar ao Orçamento','lbl-mf-can':'Cancelar','lbl-mc-close':'Fechar','mc-del':'🗑 Excluir Orçamento','m-pick-title':'Selecionar Serviço','bd-labor':'Mão de Obra/Serviços','bd-markup':'Margem','ts-added':'Adicionado','ts-saved':'Orçamento salvo! ✓','ts-del':'Excluído!','ts-empty':'Adicione pelo menos um item!','ts-copied':'Copiado!','empty-cli':'Nenhum orçamento salvo ainda.\nCrie um na aba Orçamento!','share-for':'Orçamento para','share-tot':'TOTAL DO ORÇAMENTO','share-foot':'*Valores são estimativas. O custo final pode variar.*'}};
+const PD={en:{'Outlets & Switches':[{n:'Standard Outlet',a:150,b:300},{n:'GFCI Outlet (bath/kitchen)',a:150,b:300},{n:'20A Outlet (kitchen/laundry)',a:175,b:350},{n:'USB Outlet',a:175,b:300},{n:'Single Switch',a:100,b:250},{n:'Dimmer Switch',a:150,b:350},{n:'3-way Switch',a:175,b:350}],'Lighting':[{n:'Ceiling Light Install',a:100,b:200},{n:'Recessed Can Light',a:150,b:300},{n:'Ceiling Fan Install',a:150,b:350},{n:'Outdoor Light Fixture',a:150,b:300},{n:'Under-Cabinet Lighting',a:200,b:500}],'Panel & Service':[{n:'Panel Upgrade 100A',a:1000,b:2000},{n:'Panel Upgrade 200A',a:1500,b:3500},{n:'Panel Upgrade 400A',a:3000,b:6000},{n:'Breaker Replacement',a:150,b:300},{n:'Sub-Panel Install',a:1000,b:2500}],'Dedicated Circuits':[{n:'Dedicated Circuit (general)',a:300,b:800},{n:'A/C Circuit (240V)',a:350,b:900},{n:'Dryer Circuit (240V)',a:300,b:700},{n:'EV Charger Level 2',a:500,b:1200},{n:'Hot Tub / Spa Circuit',a:800,b:2000}],'Wiring & Rewire':[{n:'Whole House Rewire (small)',a:8000,b:15000},{n:'Whole House Rewire (large)',a:15000,b:25000},{n:'Room Rewire',a:1500,b:4000},{n:'Knob & Tube Replacement',a:3000,b:10000}],'Inspection & Service':[{n:'Electrical Inspection',a:200,b:500},{n:'Troubleshooting (per hr)',a:75,b:150},{n:'Service Call',a:100,b:200}]},pt:{'Tomadas e Interruptores':[{n:'Tomada Padrão',a:150,b:300},{n:'Tomada GFCI (banheiro/cozinha)',a:150,b:300},{n:'Tomada 20A (cozinha/lavanderia)',a:175,b:350},{n:'Tomada USB',a:175,b:300},{n:'Interruptor Simples',a:100,b:250},{n:'Interruptor Dimmer',a:150,b:350},{n:'Interruptor 3 Vias',a:175,b:350}],'Iluminação':[{n:'Luminária de Teto',a:100,b:200},{n:'Spot Embutido (Recessed)',a:150,b:300},{n:'Ventilador de Teto',a:150,b:350},{n:'Luminária Externa',a:150,b:300},{n:'Iluminação Sob Armário',a:200,b:500}],'Painel e Serviço':[{n:'Upgrade Painel 100A',a:1000,b:2000},{n:'Upgrade Painel 200A',a:1500,b:3500},{n:'Upgrade Painel 400A',a:3000,b:6000},{n:'Troca de Disjuntor',a:150,b:300},{n:'Instalação Sub-Painel',a:1000,b:2500}],'Circuitos Dedicados':[{n:'Circuito Dedicado (geral)',a:300,b:800},{n:'Circuito A/C (240V)',a:350,b:900},{n:'Circuito Secadora (240V)',a:300,b:700},{n:'Carregador Elétrico EV Nível 2',a:500,b:1200},{n:'Circuito Banheira/Spa',a:800,b:2000}],'Fiação e Recabeamento':[{n:'Recabeamento Completo (pequeno)',a:8000,b:15000},{n:'Recabeamento Completo (grande)',a:15000,b:25000},{n:'Recabeamento de Cômodo',a:1500,b:4000},{n:'Substituição Fiação Antiga',a:3000,b:10000}],'Inspeção e Visita':[{n:'Inspeção Elétrica',a:200,b:500},{n:'Diagnóstico (por hora)',a:75,b:150},{n:'Chamada de Serviço',a:100,b:200}]}};
+let lang=localStorage.getItem('ep_lang')||'en',theme=localStorage.getItem('ep_theme')||'dark',items=[],clients=JSON.parse(localStorage.getItem('ep_clients')||'[]'),pickItem=null;
+const t=k=>T[lang][k]||k,$=id=>document.getElementById(id),fmt=n=>'$'+Math.round(n).toLocaleString();
+function setText(id,val){const el=$(id);if(el)el.textContent=val;}
+function setPlaceholder(id,val){const el=$(id);if(el)el.placeholder=val;}
+function applyLang(){
+  document.documentElement.lang=lang;
+  ['n0','n1','n2','n3'].forEach(k=>setText(k,t(k)));
+  ['lbl-new-est','lbl-cname','lbl-addr','lbl-notes','lbl-add-item','lbl-extras','lbl-permit','lbl-markup','lbl-tax','lbl-est-total','lbl-est-total2','lbl-save','lbl-share','lbl-clear','lbl-ga-title','lbl-ga-text','lbl-calc-title','lbl-sqft','lbl-svctype','lbl-panel','lbl-points','lbl-circuits','lbl-calc-run','lbl-cr-lab','lbl-cr-mat','lbl-cr-pan','lbl-cr-per','lbl-cr-tot','lbl-labor-ref','lbl-l1','lbl-l2','lbl-l3','lbl-s-cli','lbl-s-quot','lbl-mf-qty','lbl-mf-price','lbl-mf-add','lbl-mf-can','lbl-mc-close','mc-del'].forEach(id=>setText(id,t(id)));
+  ['o-new','o-rew','o-par','o-upg'].forEach(id=>setText(id,t(id)));
+  [['est-client','est-client'],['est-addr','est-addr'],['est-notes','est-notes'],['psearch','psearch']].forEach(([el,key])=>setPlaceholder(el,t(key)));
+  $('lbtn').textContent=lang==='en'?'🇧🇷 PT':'🇺🇸 EN';
+  renderPrices();renderItems();renderClients();
+}
+function toggleLang(){lang=lang==='en'?'pt':'en';localStorage.setItem('ep_lang',lang);applyLang();}
+function applyTheme(){document.body.setAttribute('data-theme',theme);$('tbtn').textContent=theme==='dark'?'☀️':'🌙';localStorage.setItem('ep_theme',theme);}
+function toggleTheme(){theme=theme==='dark'?'light':'dark';applyTheme();}
+const pages=['est','pri','cal','cli'];
+function go(id,btn){pages.forEach(p=>{$('pg-'+p).classList.remove('on');});document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));$('pg-'+id).classList.add('on');if(btn)btn.classList.add('on');if(id==='cli')renderClients();}
+function renderPrices(filter=''){const fl=filter.toLowerCase(),data=PD[lang];let html='';for(const[cat,list]of Object.entries(data)){const f=list.filter(x=>x.n.toLowerCase().includes(fl)||cat.toLowerCase().includes(fl));if(!f.length)continue;html+=`<div class="pcat"><div class="pcat-hd">${cat}</div>`;f.forEach(x=>{const avg=Math.round((x.a+x.b)/2);html+=`<div class="prow" onclick="quickAdd('${x.n.replace(/'/g,"\\'")}',${avg})"><span class="pname">${x.n}</span><div><div class="prange">$${x.a.toLocaleString()}–$${x.b.toLocaleString()}</div><div class="pavg">avg $${avg.toLocaleString()}</div></div></div>`;});html+=`</div>`;}$('pricelist').innerHTML=html||`<div class="empty"><div class="empty-ico">🔍</div></div>`;}
+function filterP(){renderPrices($('psearch').value);}
+function openPicker(){const data=PD[lang];let html='<div style="max-height:56vh;overflow-y:auto">';for(const[cat,list]of Object.entries(data)){html+=`<div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);font-weight:700;margin:14px 0 6px">${cat}</div>`;list.forEach(x=>{const avg=Math.round((x.a+x.b)/2);html+=`<div class="prow" onclick="selectItem('${x.n.replace(/'/g,"\\'")}',${avg})"><span class="pname">${x.n}</span><span class="prange">$${avg.toLocaleString()}</span></div>`;});}html+=`</div>`;setText('m-pick-title',t('m-pick-title'));$('m-pick-body').innerHTML=html;openM('m-pick');}
+function selectItem(name,avg){pickItem={name,avg};closeM('m-pick');setTimeout(()=>{setText('m-form-title',name);setText('lbl-mf-qty',t('lbl-mf-qty'));setText('lbl-mf-price',t('lbl-mf-price'));setText('lbl-mf-add',t('lbl-mf-add'));setText('lbl-mf-can',t('lbl-mf-can'));$('mf-qty').textContent='1';$('mf-price').value=avg;openM('m-form');},210);}
+function adjQty(d){const el=$('mf-qty');el.textContent=Math.max(1,parseInt(el.textContent)+d);}
+function confirmAdd(){const qty=parseInt($('mf-qty').textContent),price=parseFloat($('mf-price').value)||0;items.push({name:pickItem.name,qty,price});closeM('m-form');renderItems();toast(t('ts-added')+': '+pickItem.name);}
+function quickAdd(name,avg){pickItem={name,avg};setText('m-form-title',name);setText('lbl-mf-qty',t('lbl-mf-qty'));setText('lbl-mf-price',t('lbl-mf-price'));setText('lbl-mf-add',t('lbl-mf-add'));setText('lbl-mf-can',t('lbl-mf-can'));$('mf-qty').textContent='1';$('mf-price').value=avg;openM('m-form');}
+function renderItems(){const c=$('lineitems');if(!items.length){c.innerHTML='';calcTotal();return;}let h=`<div class="card"><div class="ctitle">${t('lbl-new-est')} (${items.length})</div>`;items.forEach((x,i)=>{const tot=x.qty*x.price;h+=`<div class="li"><div class="li-info"><div class="li-name">${x.name}</div><div class="li-det">${x.qty} × $${x.price.toLocaleString()}</div></div><div class="li-tot">$${tot.toLocaleString()}</div><button class="xbtn" onclick="removeItem(${i})">×</button></div>`;});h+=`</div>`;c.innerHTML=h;calcTotal();}
+function removeItem(i){items.splice(i,1);renderItems();}
+function calcTotal(){const sub=items.reduce((s,x)=>s+x.qty*x.price,0),mk=(parseFloat($('inp-markup').value)||0)/100,permit=parseFloat($('inp-permit').value)||0,tax=parseFloat($('inp-tax').value)||0,mkAmt=sub*mk,total=sub+mkAmt+permit+tax,bar=$('totbar');if(items.length){bar.style.display='flex';$('tot-amt').textContent=fmt(total);$('tot-sub').textContent=`${t('bd-labor')}: $${sub.toLocaleString()} | ${t('bd-markup')}: $${mkAmt.toFixed(0)} | +$${(permit+tax).toFixed(0)}`;}else{bar.style.display='none';}}
+['inp-permit','inp-markup','inp-tax'].forEach(id=>$(id)&&$(id).addEventListener('input',calcTotal));
+function saveEst(){if(!items.length){toast(t('ts-empty'));return;}const name=$('est-client').value||'Unknown',addr=$('est-addr').value||'',sub=items.reduce((s,x)=>s+x.qty*x.price,0),mk=(parseFloat($('inp-markup').value)||0)/100,permit=parseFloat($('inp-permit').value)||0,tax=parseFloat($('inp-tax').value)||0,total=sub+sub*mk+permit+tax;clients.unshift({name,addr,items:[...items],total,date:new Date().toLocaleDateString()});localStorage.setItem('ep_clients',JSON.stringify(clients));toast(t('ts-saved'));clearEst();}
+function clearEst(){items=[];['est-client','est-addr','est-notes'].forEach(id=>$(id).value='');$('inp-permit').value=150;$('inp-markup').value=25;$('inp-tax').value=0;renderItems();}
+function shareEst(){if(!items.length){toast(t('ts-empty'));return;}const name=$('est-client').value||'Client';let txt=`ElecPro GA — ${t('share-for')} ${name}\n\n`;items.forEach(x=>{txt+=`• ${x.name} (${x.qty}x) — $${(x.qty*x.price).toLocaleString()}\n`;});txt+=`\n${t('share-tot')}: ${$('tot-amt').textContent}\n\n${t('share-foot')}`;if(navigator.share)navigator.share({title:'ElecPro GA',text:txt});else{navigator.clipboard.writeText(txt);toast(t('ts-copied'));}}
+function doCalc(){const sqft=parseFloat($('c-sqft').value)||0,svc=$('c-svc').value,panel=parseInt($('c-pan').value),pts=parseInt($('c-pts').value)||0,cir=parseInt($('c-cir').value)||0;let lMn,lMx,mMn,mMx;if(svc==='new'){lMn=40;lMx=70;mMn=15;mMx=25;}else if(svc==='rewire'){lMn=50;lMx=80;mMn=20;mMx=30;}else if(svc==='part'){lMn=80;lMx=150;mMn=10;mMx=20;}else{lMn=0;lMx=0;mMn=0;mMx=0;}const PC={100:[1000,2000],150:[1200,2500],200:[1500,3500],400:[3000,6000]};const[pMn,pMx]=PC[panel]||[0,0];const labMn=sqft*lMn+pts*100+cir*300,labMx=sqft*lMx+pts*250+cir*800,matMn=sqft*mMn,matMx=sqft*mMx,permit=150;$('cr-lab').textContent=`${fmt(labMn)} – ${fmt(labMx)}`;$('cr-mat').textContent=`${fmt(matMn)} – ${fmt(matMx)}`;$('cr-pan').textContent=`${fmt(pMn)} – ${fmt(pMx)}`;$('cr-per').textContent=`~${fmt(permit)}`;$('cr-tot').textContent=`${fmt(labMn+matMn+pMn+permit)} – ${fmt(labMx+matMx+pMx+permit)}`;$('cres').style.display='block';}
+function renderClients(){$('s-cnt').textContent=clients.length;$('s-rev').textContent='$'+Math.round(clients.reduce((s,c)=>s+(c.total||0),0)).toLocaleString();const c=$('clilist');if(!clients.length){c.innerHTML=`<div class="empty"><div class="empty-ico">👷</div><div class="empty-txt">${t('empty-cli').replace('\n','<br>')}</div></div>`;return;}c.innerHTML=clients.map((cl,i)=>`<div class="ccard" onclick="openClient(${i})"><div class="cname">${cl.name}</div><div class="cmeta">${cl.addr||'—'}</div><div class="camt">$${Math.round(cl.total).toLocaleString()}</div><div class="cdate">${cl.date}</div></div>`).join('');}
+function openClient(i){const cl=clients[i];setText('mc-name',cl.name);setText('mc-addr',cl.addr||'');setText('lbl-est-total2',t('lbl-est-total2'));setText('lbl-mc-close',t('lbl-mc-close'));setText('mc-del',t('mc-del'));$('mc-tot').textContent='$'+Math.round(cl.total).toLocaleString();$('mc-items').innerHTML=cl.items.map(x=>`<div class="li"><div class="li-info"><div class="li-name">${x.name}</div><div class="li-det">${x.qty}x × $${x.price.toLocaleString()}</div></div><div class="li-tot">$${(x.qty*x.price).toLocaleString()}</div></div>`).join('');$('mc-del').onclick=()=>{clients.splice(i,1);localStorage.setItem('ep_clients',JSON.stringify(clients));closeM('m-cli');renderClients();toast(t('ts-del'));};openM('m-cli');}
+function openM(id){$(id).classList.add('on');}
+function closeM(id){$(id).classList.remove('on');}
+document.querySelectorAll('.ovl').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');});});
+let toastT;
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),2400);}
+applyTheme();applyLang();
+</script>
+</body>
+</html>
